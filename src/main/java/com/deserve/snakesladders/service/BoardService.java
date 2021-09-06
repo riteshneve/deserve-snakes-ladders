@@ -1,6 +1,7 @@
 package com.deserve.snakesladders.service;
 
 import com.deserve.snakesladders.constant.GameConstants;
+import com.deserve.snakesladders.exception.InvalidSnakeException;
 import com.deserve.snakesladders.model.Board;
 import com.deserve.snakesladders.model.Player;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,14 +15,16 @@ public class BoardService {
 	@Autowired
 	private DiceService diceService;
 
-	public Board createBoard() {
+	@Autowired
+	private SnakeService snakeService;
 
-		// TODO: Create snakes and ladders
-		return new Board(GameConstants.BOARD_SIZE, new ArrayList<>(), new ArrayList<>());
+	public Board createBoard() throws InvalidSnakeException {
+
+		return new Board(GameConstants.BOARD_SIZE, snakeService.createRandomSnakes(10), new ArrayList<>());
 
 	}
 
-	public void rollDiceForPlayer(Player player) {
+	public void rollDiceForPlayer(Board board, Player player) {
 
 		int diceValue = 6;
 
@@ -31,7 +34,7 @@ public class BoardService {
 
 			diceValue = diceService.rollDice();
 
-			changePlayerPositionBy(player, diceValue);
+			changePlayerPositionBy(board, player, diceValue);
 
 			System.out.println("Changed position of " + player.getColor().toString() + " to " + player.getPosition());
 
@@ -41,13 +44,16 @@ public class BoardService {
 
 	}
 
-	public void changePlayerPositionBy(Player player, int diceValue) {
+	public void changePlayerPositionBy(Board board, Player player, int diceValue) {
 
 		int nextPosition = player.getPosition() + diceValue;
 
 		if (nextPosition <= 100) {
-			// TODO: check snakes and ladders
+
 			player.setPosition(nextPosition);
+
+			snakeService.applySnakeToPlayer(board.getSnakes(), player);
+
 		}
 	}
 

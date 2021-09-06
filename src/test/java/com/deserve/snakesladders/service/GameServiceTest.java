@@ -5,6 +5,7 @@ import com.deserve.snakesladders.constant.GameStatus;
 import com.deserve.snakesladders.constant.PlayerColor;
 import com.deserve.snakesladders.exception.InvalidMaximumPlayersCountException;
 import com.deserve.snakesladders.exception.InvalidMinimumPlayersCountException;
+import com.deserve.snakesladders.exception.InvalidSnakeException;
 import com.deserve.snakesladders.model.Board;
 import com.deserve.snakesladders.model.Game;
 import com.deserve.snakesladders.model.Player;
@@ -35,7 +36,7 @@ public class GameServiceTest {
 	}
 
 	@Test
-	void testCreateGame_whenPlayersAreValid_shouldCreateGame() throws InvalidMinimumPlayersCountException, InvalidMaximumPlayersCountException {
+	void testCreateGame_whenPlayersAreValid_shouldCreateGame() throws InvalidMinimumPlayersCountException, InvalidMaximumPlayersCountException, InvalidSnakeException {
 
 		List<Player> players = new ArrayList<>(Arrays.asList(new Player(PlayerColor.BLUE, 1)));
 
@@ -186,7 +187,7 @@ public class GameServiceTest {
 		Board board = new Board(GameConstants.BOARD_SIZE, null, null);
 		Game game = new Game(board, players, GameStatus.INPROGRESS, null, 0);
 
-		Mockito.doNothing().when(boardService).rollDiceForPlayer(players.get(0));
+		Mockito.doNothing().when(boardService).rollDiceForPlayer(board, players.get(0));
 		Mockito.when(boardService.isPlayerWon(players.get(0))).thenReturn(true);
 
 		gameService.rollDice(game);
@@ -203,7 +204,7 @@ public class GameServiceTest {
 		Board board = new Board(GameConstants.BOARD_SIZE, null, null);
 		Game game = new Game(board, players, GameStatus.INPROGRESS, null, 0);
 
-		Mockito.doNothing().when(boardService).rollDiceForPlayer(players.get(0));
+		Mockito.doNothing().when(boardService).rollDiceForPlayer(board, players.get(0));
 		Mockito.when(boardService.isPlayerWon(players.get(0))).thenReturn(false);
 
 		gameService.rollDice(game);

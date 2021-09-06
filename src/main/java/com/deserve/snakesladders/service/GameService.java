@@ -4,6 +4,7 @@ import com.deserve.snakesladders.constant.GameConstants;
 import com.deserve.snakesladders.constant.GameStatus;
 import com.deserve.snakesladders.exception.InvalidMaximumPlayersCountException;
 import com.deserve.snakesladders.exception.InvalidMinimumPlayersCountException;
+import com.deserve.snakesladders.exception.InvalidSnakeException;
 import com.deserve.snakesladders.model.Board;
 import com.deserve.snakesladders.model.Game;
 import com.deserve.snakesladders.model.Player;
@@ -18,7 +19,7 @@ public class GameService {
 	@Autowired
 	private BoardService boardService;
 
-	public Game createGame(List<Player> players) throws InvalidMinimumPlayersCountException, InvalidMaximumPlayersCountException {
+	public Game createGame(List<Player> players) throws InvalidMinimumPlayersCountException, InvalidMaximumPlayersCountException, InvalidSnakeException {
 
 		if (players.size() < GameConstants.MINIMUM_PLAYERS) {
 			throw new InvalidMinimumPlayersCountException();
@@ -84,7 +85,7 @@ public class GameService {
 
 		Player currentPlayer = getCurrentPlayerForGame(game);
 
-		boardService.rollDiceForPlayer(currentPlayer);
+		boardService.rollDiceForPlayer(game.getBoard(), currentPlayer);
 
 		if (boardService.isPlayerWon(currentPlayer)) {
 

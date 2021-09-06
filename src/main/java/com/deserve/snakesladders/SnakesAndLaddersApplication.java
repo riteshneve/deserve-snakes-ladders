@@ -4,6 +4,7 @@ import com.deserve.snakesladders.constant.GameConstants;
 import com.deserve.snakesladders.exception.InvalidMaximumPlayersCountException;
 import com.deserve.snakesladders.exception.InvalidMinimumPlayersCountException;
 import com.deserve.snakesladders.exception.InvalidPlayerException;
+import com.deserve.snakesladders.exception.InvalidSnakeException;
 import com.deserve.snakesladders.model.Game;
 import com.deserve.snakesladders.model.Player;
 import com.deserve.snakesladders.service.GameService;
@@ -49,7 +50,7 @@ public class SnakesAndLaddersApplication implements ApplicationRunner {
 
 			}
 
-		} catch (InvalidPlayerException | InvalidMaximumPlayersCountException | InvalidMinimumPlayersCountException e) {
+		} catch (InvalidPlayerException | InvalidMaximumPlayersCountException | InvalidMinimumPlayersCountException | InvalidSnakeException e) {
 
 			System.out.println("ERROR : ");
 			System.out.println(e.getMessage());
