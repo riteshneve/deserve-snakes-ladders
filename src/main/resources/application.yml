@@ -1,0 +1,6 @@
+server:
+  port: 9050
+
+spring:
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE:local}
