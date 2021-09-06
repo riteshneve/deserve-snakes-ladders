@@ -7,6 +7,7 @@ import com.deserve.snakesladders.exception.InvalidMaximumPlayersCountException;
 import com.deserve.snakesladders.exception.InvalidMinimumPlayersCountException;
 import com.deserve.snakesladders.exception.InvalidSnakeException;
 import com.deserve.snakesladders.model.Board;
+import com.deserve.snakesladders.model.Dice;
 import com.deserve.snakesladders.model.Game;
 import com.deserve.snakesladders.model.Player;
 import org.junit.jupiter.api.Assertions;
@@ -40,11 +41,11 @@ public class GameServiceTest {
 
 		List<Player> players = new ArrayList<>(Arrays.asList(new Player(PlayerColor.BLUE, 1)));
 
-		Board board = new Board(GameConstants.BOARD_SIZE, null, null);
+		Board board = new Board(GameConstants.BOARD_SIZE, null, null, new Dice(false));
 
-		Mockito.when(boardService.createBoard()).thenReturn(board);
+		Mockito.when(boardService.createBoard(false)).thenReturn(board);
 
-		Game game = gameService.createGame(players);
+		Game game = gameService.createGame(players, false);
 
 		Assertions.assertNotNull(game);
 		Assertions.assertEquals(GameStatus.PENDING, game.getStatus());
@@ -56,14 +57,14 @@ public class GameServiceTest {
 
 		Assertions.assertThrows(
 				InvalidMinimumPlayersCountException.class,
-				() -> gameService.createGame(new ArrayList<>())
+				() -> gameService.createGame(new ArrayList<>(), false)
 		);
 
 		List<Player> players = new ArrayList<>(Arrays.asList(new Player(PlayerColor.BLUE, 1), new Player(PlayerColor.BLUE, 1), new Player(PlayerColor.BLUE, 1), new Player(PlayerColor.BLUE, 1), new Player(PlayerColor.BLUE, 1)));
 
 		Assertions.assertThrows(
 				InvalidMaximumPlayersCountException.class,
-				() -> gameService.createGame(players)
+				() -> gameService.createGame(players, false)
 		);
 
 	}
@@ -71,7 +72,7 @@ public class GameServiceTest {
 	@Test
 	void testStartGame_whenGameIsValid_shouldSetStatusAndCurrentPlayer() throws InvalidMinimumPlayersCountException {
 
-		Board board = new Board(GameConstants.BOARD_SIZE, null, null);
+		Board board = new Board(GameConstants.BOARD_SIZE, null, null, new Dice(false));
 		Game game = new Game(board, Arrays.asList(new Player(PlayerColor.BLUE, 1)), GameStatus.PENDING, null, null);
 
 		gameService.startGame(game);
@@ -83,7 +84,7 @@ public class GameServiceTest {
 	@Test
 	void testStartGame_whenGameDoesNotHavePlayers_shouldThrowException() {
 
-		Board board = new Board(GameConstants.BOARD_SIZE, null, null);
+		Board board = new Board(GameConstants.BOARD_SIZE, null, null, new Dice(false));
 
 		Assertions.assertThrows(
 				InvalidMinimumPlayersCountException.class,
@@ -106,7 +107,7 @@ public class GameServiceTest {
 	@Test
 	void testEndGame_shouldSetStatusToFinishedAndWinner() {
 
-		Board board = new Board(GameConstants.BOARD_SIZE, null, null);
+		Board board = new Board(GameConstants.BOARD_SIZE, null, null, new Dice(false));
 		Game game = new Game(board, null, GameStatus.INPROGRESS, null, null);
 		Player winner = new Player(PlayerColor.BLUE, 100);
 
@@ -119,7 +120,7 @@ public class GameServiceTest {
 	@Test
 	void testIsGameFinished_whenGameIsFinshed_shouldReturnTrue() {
 
-		Board board = new Board(GameConstants.BOARD_SIZE, null, null);
+		Board board = new Board(GameConstants.BOARD_SIZE, null, null, new Dice(false));
 		Game game = new Game(board, null, GameStatus.FINISHED, null, null);
 
 		boolean isGameFinished = gameService.isGameFinished(game);
@@ -130,7 +131,7 @@ public class GameServiceTest {
 	@Test
 	void testIsGameFinished_whenGameIsNotFinshed_shouldReturnFalse() {
 
-		Board board = new Board(GameConstants.BOARD_SIZE, null, null);
+		Board board = new Board(GameConstants.BOARD_SIZE, null, null, new Dice(false));
 		Game game = new Game(board, null, GameStatus.INPROGRESS, null, null);
 
 		boolean isGameFinished = gameService.isGameFinished(game);
@@ -143,7 +144,7 @@ public class GameServiceTest {
 
 		List<Player> players = new ArrayList<>(Arrays.asList(new Player(PlayerColor.BLUE, 1)));
 
-		Board board = new Board(GameConstants.BOARD_SIZE, null, null);
+		Board board = new Board(GameConstants.BOARD_SIZE, null, null, new Dice(false));
 		Game game = new Game(board, players, GameStatus.INPROGRESS, null, 0);
 
 		Player player = gameService.getCurrentPlayerForGame(game);
@@ -156,7 +157,7 @@ public class GameServiceTest {
 
 		List<Player> players = new ArrayList<>(Arrays.asList(new Player(PlayerColor.BLUE, 1), new Player(PlayerColor.GREEN, 1)));
 
-		Board board = new Board(GameConstants.BOARD_SIZE, null, null);
+		Board board = new Board(GameConstants.BOARD_SIZE, null, null, new Dice(false));
 		Game game = new Game(board, players, GameStatus.INPROGRESS, null, 0);
 
 		gameService.changeCurrentPlayer(game);
@@ -170,7 +171,7 @@ public class GameServiceTest {
 
 		List<Player> players = new ArrayList<>(Arrays.asList(new Player(PlayerColor.BLUE, 1), new Player(PlayerColor.GREEN, 1)));
 
-		Board board = new Board(GameConstants.BOARD_SIZE, null, null);
+		Board board = new Board(GameConstants.BOARD_SIZE, null, null, new Dice(false));
 		Game game = new Game(board, players, GameStatus.INPROGRESS, null, 1);
 
 		gameService.changeCurrentPlayer(game);
@@ -184,7 +185,7 @@ public class GameServiceTest {
 
 		List<Player> players = new ArrayList<>(Arrays.asList(new Player(PlayerColor.BLUE, 1), new Player(PlayerColor.GREEN, 1)));
 
-		Board board = new Board(GameConstants.BOARD_SIZE, null, null);
+		Board board = new Board(GameConstants.BOARD_SIZE, null, null, new Dice(false));
 		Game game = new Game(board, players, GameStatus.INPROGRESS, null, 0);
 
 		Mockito.doNothing().when(boardService).rollDiceForPlayer(board, players.get(0));
@@ -201,7 +202,7 @@ public class GameServiceTest {
 
 		List<Player> players = new ArrayList<>(Arrays.asList(new Player(PlayerColor.BLUE, 1), new Player(PlayerColor.GREEN, 1)));
 
-		Board board = new Board(GameConstants.BOARD_SIZE, null, null);
+		Board board = new Board(GameConstants.BOARD_SIZE, null, null, new Dice(false));
 		Game game = new Game(board, players, GameStatus.INPROGRESS, null, 0);
 
 		Mockito.doNothing().when(boardService).rollDiceForPlayer(board, players.get(0));

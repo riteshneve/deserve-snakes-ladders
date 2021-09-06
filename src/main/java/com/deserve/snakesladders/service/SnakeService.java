@@ -75,7 +75,7 @@ public class SnakeService {
 
 		for (Snake snake: snakes) {
 			if (snake.getHead().equals(player.getPosition())) {
-				System.out.println("Snake bit at" + player.getPosition());
+				System.out.println("Snake bit at " + player.getPosition());
 				player.setPosition(snake.getTail());
 			}
 		}

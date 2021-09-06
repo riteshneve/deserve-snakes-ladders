@@ -33,11 +33,23 @@ public class SnakesAndLaddersApplication implements ApplicationRunner {
 	@Override
 	public void run(ApplicationArguments args) {
 
+		boolean isCrooked = false;
+
+		List<String> customArgs = args.getOptionValues("isCrooked");
+
+		if (customArgs != null && customArgs.size() > 0) {
+			isCrooked = Boolean.parseBoolean(customArgs.get(0));
+		}
+
+		if (isCrooked) {
+			System.out.println("Your dice is crooked!");
+		}
+
 		try {
 
 			List<Player> players = playerService.createRandomPlayers(1);
 
-			Game game = gameService.createGame(players);
+			Game game = gameService.createGame(players, isCrooked);
 
 			gameService.startGame(game);
 

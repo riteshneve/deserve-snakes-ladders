@@ -11,8 +11,9 @@ import java.util.List;
 @AllArgsConstructor
 public class Board {
 
-	Integer size;
-	List<Snake> snakes;
-	List<Ladder> ladders;
+	private Integer size;
+	private List<Snake> snakes;
+	private List<Ladder> ladders;
+	private Dice dice;
 
 }

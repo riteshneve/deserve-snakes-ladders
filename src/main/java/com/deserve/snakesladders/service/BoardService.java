@@ -18,9 +18,9 @@ public class BoardService {
 	@Autowired
 	private SnakeService snakeService;
 
-	public Board createBoard() throws InvalidSnakeException {
+	public Board createBoard(Boolean isCrooked) throws InvalidSnakeException {
 
-		return new Board(GameConstants.BOARD_SIZE, snakeService.createRandomSnakes(10), new ArrayList<>());
+		return new Board(GameConstants.BOARD_SIZE, snakeService.createRandomSnakes(10), new ArrayList<>(), diceService.createDice(isCrooked));
 
 	}
 
@@ -32,7 +32,7 @@ public class BoardService {
 
 		while (diceValue == 6 && count < 3) {
 
-			diceValue = diceService.rollDice();
+			diceValue = diceService.rollDice(board.getDice());
 
 			changePlayerPositionBy(board, player, diceValue);
 

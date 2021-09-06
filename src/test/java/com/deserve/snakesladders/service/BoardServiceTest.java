@@ -4,6 +4,7 @@ import com.deserve.snakesladders.constant.GameConstants;
 import com.deserve.snakesladders.constant.PlayerColor;
 import com.deserve.snakesladders.exception.InvalidSnakeException;
 import com.deserve.snakesladders.model.Board;
+import com.deserve.snakesladders.model.Dice;
 import com.deserve.snakesladders.model.Player;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -35,7 +36,7 @@ public class BoardServiceTest {
 	@Test
 	void testCreatedBoard_shouldCreateBoard() throws InvalidSnakeException {
 
-		Board board = boardService.createBoard();
+		Board board = boardService.createBoard(false);
 		Assertions.assertNotNull(board);
 
 	}
@@ -44,9 +45,9 @@ public class BoardServiceTest {
 	void testRollDiceForPlayer_whenDiceRollsLessThan6_shouldChangeLocation() {
 
 		Player player = new Player(PlayerColor.BLUE, 1);
-		Board board = new Board(GameConstants.BOARD_SIZE, new ArrayList<>(), new ArrayList<>());
+		Board board = new Board(GameConstants.BOARD_SIZE, new ArrayList<>(), new ArrayList<>(), new Dice(false));
 
-		Mockito.when(diceService.rollDice()).thenReturn(3);
+		Mockito.when(diceService.rollDice(board.getDice())).thenReturn(3);
 
 		boardService.rollDiceForPlayer(board, player);
 
@@ -58,9 +59,9 @@ public class BoardServiceTest {
 	void testRollDiceForPlayer_whenDiceRolls6_shouldChangeLocationThreeTimes() {
 
 		Player player = new Player(PlayerColor.BLUE, 1);
-		Board board = new Board(GameConstants.BOARD_SIZE, new ArrayList<>(), new ArrayList<>());
+		Board board = new Board(GameConstants.BOARD_SIZE, new ArrayList<>(), new ArrayList<>(), new Dice(false));
 
-		Mockito.when(diceService.rollDice()).thenReturn(6);
+		Mockito.when(diceService.rollDice(board.getDice())).thenReturn(6);
 
 		boardService.rollDiceForPlayer(board, player);
 
@@ -72,7 +73,7 @@ public class BoardServiceTest {
 	void testChangePlayerPositionBy_whenNextPositionIsLessThan100_shouldChangePosition() {
 
 		Player player = new Player(PlayerColor.BLUE, 19);
-		Board board = new Board(GameConstants.BOARD_SIZE, new ArrayList<>(), new ArrayList<>());
+		Board board = new Board(GameConstants.BOARD_SIZE, new ArrayList<>(), new ArrayList<>(), new Dice(false));
 		Mockito.doNothing().when(snakeService).applySnakeToPlayer(new ArrayList<>(), player);
 		boardService.changePlayerPositionBy(board, player, 5);
 		Assertions.assertEquals(player.getPosition(), 24);
@@ -83,7 +84,7 @@ public class BoardServiceTest {
 	void testChangePlayerPositionBy_whenNextPositionIsMoreThan100_shouldNotChangePosition() {
 
 		Player player = new Player(PlayerColor.BLUE, 99);
-		Board board = new Board(GameConstants.BOARD_SIZE, new ArrayList<>(), new ArrayList<>());
+		Board board = new Board(GameConstants.BOARD_SIZE, new ArrayList<>(), new ArrayList<>(), new Dice(false));
 		Mockito.doNothing().when(snakeService).applySnakeToPlayer(new ArrayList<>(), player);
 		boardService.changePlayerPositionBy(board, player, 5);
 		Assertions.assertEquals(player.getPosition(), 99);

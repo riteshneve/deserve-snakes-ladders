@@ -19,7 +19,7 @@ public class GameService {
 	@Autowired
 	private BoardService boardService;
 
-	public Game createGame(List<Player> players) throws InvalidMinimumPlayersCountException, InvalidMaximumPlayersCountException, InvalidSnakeException {
+	public Game createGame(List<Player> players, Boolean isCrooked) throws InvalidMinimumPlayersCountException, InvalidMaximumPlayersCountException, InvalidSnakeException {
 
 		if (players.size() < GameConstants.MINIMUM_PLAYERS) {
 			throw new InvalidMinimumPlayersCountException();
@@ -31,7 +31,7 @@ public class GameService {
 
 		System.out.println("Creating game");
 
-		Board board = boardService.createBoard();
+		Board board = boardService.createBoard(isCrooked);
 
 		return new Game(board, players, GameStatus.PENDING, null, null);
 
